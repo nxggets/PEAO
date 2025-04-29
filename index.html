@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Policy Allowlist Parser</title>
+  <style>
+    /* css goes here */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1e2a47;
+      padding: 40px;
+      color: #cfdff0;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: #cfdff0;
+    }
+
+    h2 {
+      color: #cfdff0;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      background-color: #2a3d5f;
+      border: 1px solid #45577b;
+      margin-top: 10px;
+      box-sizing: border-box;
+      resize: vertical;
+      height: 200px;
+      color: #f0f0f0;
+    }
+
+    #output {
+      margin-top: 20px;
+      background: #2a3d5f;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #45577b;
+      height: 200px;
+      overflow-y: auto;
+      color: #f0f0f0;
+    }
+
+    button {
+      margin-top: 20px;
+      margin-right: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #4f74d1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #3b5ea1;
+    }
+
+    a {
+      display: block;
+      margin-bottom: 6px;
+      color: #4f74d1; 
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #3b5ea1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Policy Extension Allowlist Opener</h1>
+
+  <label for="input">paste your allowlist here:</label>
+  <textarea id="input" placeholder="paste the list including [ ] and commas"></textarea>
+
+  <div>
+    <button onclick="regex()">create url list</button>
+    <button onclick="openall()">open all(must allow popups)</button>
+  </div>
+
+  <h2>very clean output:</h2>
+  <div id="output"></div>
+
+  <script>
+    let links = [];
+
+    function regex() {
+      const input = document.getElementById("input").value;
+      const base = "https://chromewebstore.google.com/detail/";
+      links = input
+        .replace(/[\[\]",]/g, '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(id => base + id);
+
+      const output = document.getElementById("output");
+      output.innerHTML = links
+        .map(url => `<a href="${url}" target="_blank">${url}</a>`)
+        .join('');
+    }
+
+    function openall() {
+      if (!links.length) {
+        alert("there isnt a link to open, try again");
+        return;
+      }
+      links.forEach(url => window.open(url, '_blank'));
+    }
+  </script>
+
+</body>
+</html>
